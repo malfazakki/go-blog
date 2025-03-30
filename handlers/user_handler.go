@@ -75,7 +75,7 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
+	if r.Method != http.MethodPut {
 		ErrorResponse(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
