@@ -13,12 +13,18 @@ func SetupRoutes(db *gorm.DB) *mux.Router {
 
 	// Initialize repositories
 	userRepo := repositories.NewUserRepository(db)
+	postRepo := repositories.NewPostRepository(db)
+	categoryRepo := repositories.NewCategoryRepository(db)
 
 	// Initialize handlers
 	userHandler := handlers.NewUserHandler(userRepo)
+	postHandler := handlers.NewPostHandler(postRepo, categoryRepo)
+	categoryHandler := handlers.NewCategoryHandler(categoryRepo)
 
 	// Setup specific route groups
 	SetupUserRoutes(router, userHandler)
+	SetupPostRoutes(router, postHandler)
+	SetupCategoryRoutes(router, categoryHandler)
 
 	return router
 }
