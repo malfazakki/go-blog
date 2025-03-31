@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/malfazakki/go-blog/models"
 	"github.com/malfazakki/go-blog/repositories"
+	"github.com/malfazakki/go-blog/utils"
 )
 
 type UserHandler struct {
@@ -32,6 +33,19 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Hashing the Password, but save for later
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		ErrorResponse(w, http.StatusInternalServerError, "Error hashing passwrod")
+		return
+	}
+	user.Password = hashedPassword
+
+	// Check if email is registered
+	_, err = h.userRepo.FindByEmail(user.Email)
+	if err != nil {
+		ErrorResponse(w, http.StatusBadRequest, "Email is registered")
+		return
+	}
 
 	err = h.userRepo.Create(&user)
 	if err != nil {
@@ -85,7 +99,6 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	idStr, ok := vars["id"]
-
 	if !ok {
 		ErrorResponse(w, http.StatusBadRequest, "User ID is required")
 		return
@@ -117,7 +130,13 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		existingUser.Email = updatedUser.Email
 	}
 	if updatedUser.Password != "" {
-		existingUser.Password = updatedUser.Password
+		// Hash the new password
+		hashedPassword, err := utils.HashPassword(updatedUser.Password)
+		if err != nil {
+			ErrorResponse(w, http.StatusInternalServerError, "Error hashing password")
+			return
+		}
+		existingUser.Password = hashedPassword
 	}
 
 	err = h.userRepo.Update(existingUser)
