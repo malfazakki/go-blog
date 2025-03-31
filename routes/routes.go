@@ -22,11 +22,14 @@ func SetupRoutes(db *gorm.DB) *mux.Router {
 	categoryHandler := handlers.NewCategoryHandler(categoryRepo)
 	authHandler := handlers.NewAuthHandler(userRepo)
 
+	// Create API router with subrouter
+	apiRouter := router.PathPrefix("/api").Subrouter()
+
 	// Setup specific route groups
-	SetupUserRoutes(router, userHandler)
-	SetupPostRoutes(router, postHandler)
-	SetupCategoryRoutes(router, categoryHandler)
-	SetupAuthRoutes(router, authHandler)
+	SetupUserRoutes(apiRouter, userHandler)
+	SetupPostRoutes(apiRouter, postHandler)
+	SetupCategoryRoutes(apiRouter, categoryHandler)
+	SetupAuthRoutes(apiRouter, authHandler)
 
 	return router
 }
