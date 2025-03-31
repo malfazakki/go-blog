@@ -14,10 +14,11 @@ func SetupUserRoutes(router *mux.Router, handler *handlers.UserHandler) {
 	userRouter.HandleFunc("", handler.CreateUser).Methods("POST")
 
 	// Use Auth Middleware for protecting routes
-	userRouter.Use(middleware.AuthMiddleware)
+	protectedUserRouter := router.PathPrefix("/users").Subrouter()
+	protectedUserRouter.Use(middleware.AuthMiddleware)
 
 	// Private routes
-	userRouter.HandleFunc("", handler.GetUser).Methods("GET")
-	userRouter.HandleFunc("/{id:[0-9]+}", handler.GetUser).Methods("GET")
-	userRouter.HandleFunc("/{id:[0-9]+}", handler.UpdateUser).Methods("PUT")
+	protectedUserRouter.HandleFunc("", handler.GetUser).Methods("GET")
+	protectedUserRouter.HandleFunc("/{id:[0-9]+}", handler.GetUser).Methods("GET")
+	protectedUserRouter.HandleFunc("/{id:[0-9]+}", handler.UpdateUser).Methods("PUT")
 }

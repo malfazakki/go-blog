@@ -16,10 +16,11 @@ func SetupPostRoutes(router *mux.Router, handler *handlers.PostHandler) {
 	postRouter.HandleFunc("/{id:[0-9]+}", handler.GetPost).Methods("GET")
 
 	// Protecting the routes
-	postRouter.Use(middleware.AuthMiddleware)
+	protectedPostRouter := router.PathPrefix("/posts").Subrouter()
+	protectedPostRouter.Use(middleware.AuthMiddleware)
 
 	// Private routes
-	postRouter.HandleFunc("", handler.CreatePost).Methods("POST")
-	postRouter.HandleFunc("/{id:[0-9]+}", handler.Update).Methods("PUT")
-	postRouter.HandleFunc("/{id:[0-9]+}", handler.DeletePost).Methods("DELETE")
+	protectedPostRouter.HandleFunc("", handler.CreatePost).Methods("POST")
+	protectedPostRouter.HandleFunc("/{id:[0-9]+}", handler.Update).Methods("PUT")
+	protectedPostRouter.HandleFunc("/{id:[0-9]+}", handler.DeletePost).Methods("DELETE")
 }
