@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,11 +9,24 @@ import (
 
 	"github.com/malfazakki/go-blog/config"
 	"github.com/malfazakki/go-blog/routes"
+	"github.com/malfazakki/go-blog/seeders"
 )
 
 func main() {
+	// Parse command line flags
+	seed := flag.Bool("seed", false, "Seed the database with sample data")
+	flag.Parse()
+
 	// Initialize database connection
 	config.ConnectDatabase()
+
+	// Run seeders it the seed flag is provided
+	if *seed {
+		log.Println("Seeding database...")
+		seeders.RunSeeders(config.DB)
+		log.Println("Database seeding completed")
+		return
+	}
 
 	// Setup routes
 	router := routes.SetupRoutes(config.DB)
