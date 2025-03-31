@@ -41,10 +41,11 @@ func SeedUsers(db *gorm.DB) {
 		hashedPassword, err := utils.HashPassword(users[i].Password)
 		if err != nil {
 			log.Printf("Error hashing password: %v", err)
+			return
 		}
 		users[i].Password = hashedPassword
 
-		if err := db.Create(&users[i]); err != nil {
+		if err := db.Create(&users[i]).Error; err != nil {
 			log.Printf("Error creating user: %v", err)
 			return
 		}

@@ -14,6 +14,7 @@ func SeedPosts(db *gorm.DB) {
 	db.Model(&models.Post{}).Count(&count)
 	if count > 0 {
 		log.Println("Posts already seeded")
+		return
 	}
 
 	// Get users
@@ -74,6 +75,7 @@ func SeedPosts(db *gorm.DB) {
 	for i := range posts {
 		if err := db.Create(&posts[i]).Error; err != nil {
 			log.Printf("Error creating post: %v", err)
+			return
 		}
 
 		// Assign 1-3 random categories to each post
@@ -82,6 +84,7 @@ func SeedPosts(db *gorm.DB) {
 			categoryIndex := rand.Intn(len(categories))
 			if err := db.Model(&posts[i]).Association("Categories").Append(&categories[categoryIndex]); err != nil {
 				log.Printf("Error assigning category to post: %v", err)
+				return
 			}
 		}
 	}

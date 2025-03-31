@@ -8,7 +8,7 @@ import (
 
 func SetupUserRoutes(router *mux.Router, handler *handlers.UserHandler) {
 	// Create a subrouter for user endpoints
-	userRouter := router.PathPrefix("/api/users").Subrouter()
+	userRouter := router.PathPrefix("/users").Subrouter()
 
 	// Public routes
 	userRouter.HandleFunc("", handler.CreateUser).Methods("POST")

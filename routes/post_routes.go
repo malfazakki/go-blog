@@ -9,7 +9,7 @@ import (
 // SetupPostRoutes configures all post-related routes
 func SetupPostRoutes(router *mux.Router, handler *handlers.PostHandler) {
 	// Create a subrouter for post endpoints
-	postRouter := router.PathPrefix("/api/posts").Subrouter()
+	postRouter := router.PathPrefix("/posts").Subrouter()
 
 	// Public routes
 	postRouter.HandleFunc("", handler.GetPost).Methods("GET")

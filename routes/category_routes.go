@@ -9,7 +9,7 @@ import (
 // SetupCategoryRoutes configures all category-related routes
 func SetupCategoryRoutes(router *mux.Router, handler *handlers.CategoryHandler) {
 	// Create a subrouter for category endpoints
-	categoryRouter := router.PathPrefix("/api/categories").Subrouter()
+	categoryRouter := router.PathPrefix("/categories").Subrouter()
 
 	// Public routes
 	categoryRouter.HandleFunc("", handler.GetCategory).Methods("GET")
