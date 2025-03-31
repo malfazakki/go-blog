@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/malfazakki/go-blog/models"
 	"github.com/malfazakki/go-blog/repositories"
 )
@@ -50,9 +51,11 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract user ID from URL query parameters
-	idStr := r.URL.Query().Get("id")
-	if idStr == "" {
+	// Get ID from URL query parameters
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+
+	if !ok {
 		ErrorResponse(w, http.StatusBadRequest, "User ID is required")
 		return
 	}
@@ -80,8 +83,10 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	idStr := r.URL.Query().Get("id")
-	if idStr == "" {
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+
+	if !ok {
 		ErrorResponse(w, http.StatusBadRequest, "User ID is required")
 		return
 	}

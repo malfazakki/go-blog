@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/malfazakki/go-blog/models"
 	"github.com/malfazakki/go-blog/repositories"
 )
@@ -47,8 +48,10 @@ func (h *PostHandler) GetPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extract post ID from URL query parameters
-	idStr := r.URL.Query().Get("id")
-	if idStr == "" {
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+
+	if !ok {
 		// If no ID is provided, return all posts
 		posts, err := h.postRepo.FindAll()
 		if err != nil {
@@ -81,8 +84,10 @@ func (h *PostHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extract post ID from URL Query Parameters
-	idStr := r.URL.Query().Get("id")
-	if idStr == "" {
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+
+	if !ok {
 		ErrorResponse(w, http.StatusBadRequest, "Post ID is required")
 		return
 	}
@@ -134,8 +139,10 @@ func (h *PostHandler) DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extract ID from URL query parameters
-	idStr := r.URL.Query().Get("id")
-	if idStr == "" {
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+
+	if !ok {
 		ErrorResponse(w, http.StatusBadRequest, "Post ID is required")
 		return
 	}
