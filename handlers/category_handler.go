@@ -17,7 +17,7 @@ func NewCategoryHandler(categoryRepo repositories.CategoryRepository) *CategoryH
 	return &CategoryHandler{categoryRepo}
 }
 
-func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorResponse(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
@@ -74,7 +74,7 @@ func (h *CategoryHandler) GetCategory(w http.ResponseWriter, r *http.Request) {
 	SuccessResponse(w, http.StatusOK, "Category retrieved successfully", category)
 }
 
-func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		ErrorResponse(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
@@ -120,7 +120,7 @@ func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 	SuccessResponse(w, http.StatusOK, "Category updated successfully", existingCategory)
 }
 
-func (h *CategoryHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) DeleteCategory(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		ErrorResponse(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
