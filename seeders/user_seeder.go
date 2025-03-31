@@ -46,6 +46,7 @@ func SeedUsers(db *gorm.DB) {
 
 		if err := db.Create(&users[i]); err != nil {
 			log.Printf("Error creating user: %v", err)
+			return
 		}
 	}
 
